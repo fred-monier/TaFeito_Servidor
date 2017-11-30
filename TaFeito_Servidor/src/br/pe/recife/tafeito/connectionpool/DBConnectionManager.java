@@ -1,10 +1,7 @@
-//Verificar o metodo createPools"
-
 package br.pe.recife.tafeito.connectionpool;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
@@ -15,8 +12,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Hashtable;
-import java.util.Properties;
-import java.util.StringTokenizer;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -27,50 +24,97 @@ import java.util.Vector;
  * Quando o cliente finaliza a aplicacao, deve-se chamar o metodo release() para fechar 
  * todas as conexoes abertas e para outras que estejam limpas.
  */
-
 public class DBConnectionManager {
-	static private DBConnectionManager instance;      
-	static private int clients;
+	
+	private static DBConnectionManager instance; 
+	
+	private static int clients;
 
 	private Vector drivers = new Vector();
-	private PrintWriter log;
+	
 	private Hashtable pools = new Hashtable();
+	
 	private boolean modo_debug = false;
-
-	/**
-	 * Retorna a unica instancia, criando uma se eh a primeira vez que
-	 * este metodo eh chamado.
-	 *
-	 * @return DBConnectionManager A unica instancia.
-	 */
-	static synchronized public DBConnectionManager getInstance() {
+	
+	private PrintWriter log;
+	
+	public static synchronized DBConnectionManager getInstance(List<String> jdbcDrivers, List<DBConexao> jdbcConnections) {
+		
 		if (instance == null) {
-			instance = new DBConnectionManager();
+			instance = new DBConnectionManager(jdbcDrivers, jdbcConnections);
 		}
+		
 		clients++;
+		
 		return instance;
 	}
 
 	/**
 	 * Um construtor privado do tipo Singleton
 	 */
-	private DBConnectionManager() {
-		init();
+	private DBConnectionManager(List<String> jdbcDrivers, List<DBConexao> jdbcConnections) {
+		
+		init(jdbcDrivers, jdbcConnections);
 	}
 
-	/**
-	 * Retorna uma conexao para o pool nomeado.
-	 *
-	 * @param name O nome do pool como definido no arquivo de propriedades
-	 * @param con A conexao
-	 */
-	public void freeConnection(String name, Connection con) {
-		DBConnectionPool pool = (DBConnectionPool) pools.get(name);
-		if (pool != null) {
-			pool.freeConnection(con);
+	private void init(List<String> jdbcDrivers, List<DBConexao> jdbcConnections) {
+		
+		URL url = getClass().getClassLoader().getResource("classes");
+
+		String logFile = url.getPath() + "/DBConnectionManagerTaFeito.log";		
+		
+		try {
+			log = new PrintWriter(new FileWriter(logFile, true), true);
+			
+		} catch (IOException e) {
+			System.err.println("Nao consigo abrir o arquivo de log: " + logFile);
+			log = new PrintWriter(System.err);
+		}
+		
+		System.out.println("Configuracao do log DBConnectionManager: " + modo_debug);
+		
+		loadDrivers(jdbcDrivers);
+		createPools(jdbcConnections);
+	}
+
+	private void loadDrivers(List<String> jdbcDrivers) {
+		
+		Iterator<String> iterator = jdbcDrivers.iterator();
+		
+		while (iterator.hasNext()) {
+			
+			String driverClassName = iterator.next();
+			try {
+				Driver driver = (Driver)
+					Class.forName(driverClassName).newInstance();
+				DriverManager.registerDriver(driver);
+				drivers.addElement(driver);
+				log("Registrado o driver JDBC: " + driverClassName);
+			}
+			catch (Exception e) {
+				log("Nao posso registrar o driver JDBC: " +
+					driverClassName + ", Exception: " + e);
+			}
 		}
 	}
 
+	private void createPools(List<DBConexao> jdbcConecctions) {
+		
+		Iterator<DBConexao> iterator = jdbcConecctions.iterator();
+		
+		while (iterator.hasNext()) {
+			
+			DBConexao dbConn = iterator.next();
+			
+			DBConnectionPool pool = new DBConnectionPool(dbConn.getFonte(), dbConn.getUrl(), 
+					dbConn.getLogin(), dbConn.getSenha(), dbConn.getMaxConexoes());
+			
+				pools.put(dbConn.getFonte(), pool);
+				
+				log("Pool de conexoes inicializado: " + dbConn.getFonte());			
+		}
+	}	
+		
 	/**
 	 * Retorna uma conexao aberta. Se nenhum esta disponivel, e o numero
 	 * maximo de conexoes tem sido superado, uma nova conexao eh criada.
@@ -85,29 +129,25 @@ public class DBConnectionManager {
 		}
 		return null;
 	}
-
+	
 	/**
-	 * Retorna uma conexao aberta. Se nenhuma esta disponivel, e o numero
-	 * maximo de conexoes tem sido superado, uma nova conexao eh criada. Se o
-	 * numero maximo de conexoes tem sido superado, espera ate que um esteja
-	 * disponivel ou o tempo especificado tenha sido terminado.
+	 * Retorna uma conexao para o pool nomeado.
 	 *
-	 * @param name O nomo do pool definido no arquivo de propriedades
-	 * @param time O numero de milisegundos para esperar
-	 * @return Connection A conexao ou nulo
+	 * @param name O nome do pool como definido no arquivo de propriedades
+	 * @param con A conexao
 	 */
-//	public Connection getConnection_(String name, long time) {
-//		DBConnectionPool pool = (DBConnectionPool) pools.get(name);
-//		if (pool != null) {
-//			return pool.getConnection_(time);
-//		}
-//		return null;
-//	}
+	public void freeConnection(String name, Connection con) {
+		DBConnectionPool pool = (DBConnectionPool) pools.get(name);
+		if (pool != null) {
+			pool.freeConnection(con);
+		}
+	}
 
 	/**
 	 * Fecha todas as conexoes abertas e limpa o registro de todos os drivers.
 	 */
 	public synchronized void release() {
+		
 		// Espera ate chamado pelo ultimo cliente
 		log("Numero de clientes: " + DBConnectionManager.clients);
 		if (--clients != 0) {
@@ -128,111 +168,6 @@ public class DBConnectionManager {
 			}
 			catch (SQLException e) {
 				log(e, "Nao posso limpar o registro do driver JDBC: " + driver.getClass().getName());
-			}
-		}
-	}
-
-	/**
-	 * Carrega as propriedades e inicializa a instancia com seus valores.
-	 */
-	private void init() {
-
-		URL url = this.getClass().getClassLoader().getResource("/db.properties");
-		InputStream is = this.getClass().getClassLoader().getResourceAsStream("/db.properties");
-
-		Properties dbProps = new Properties();
-
-		try {
-
-		  dbProps.load(is);
-
-		}
-		catch (Exception e) {
-			System.err.println("Nao consigo ler o arquivo de propriedades. " +
-				"Verifique se o arquivo db.properties esta no diretorio WEB-INF/classes.");
-			return;
-		}
-
-		String logFile = url.getPath().substring(0, url.getPath().lastIndexOf("/")) + "/DBConnectionManagerBOE.log";
-		try {
-			log = new PrintWriter(new FileWriter(logFile, true), true);
-		}
-		catch (IOException e) {
-			System.err.println("Nao consigo abrir o arquivo de log: " + logFile);
-			log = new PrintWriter(System.err);
-		}
-		System.out.println("Configuracao do log DBConnectionManager: "+(String)dbProps.getProperty("log"));
-		if(((String)dbProps.getProperty("log", "false")).equals("true")){
-			modo_debug = true;
-		}
-		loadDrivers(dbProps);
-		createPools(dbProps);
-	}
-
-	/**
-	 * Carrega e registra todos os drivers JDBC. Isto eh feito pelo
-	 * DBConnectionManager, oposto ao DBConnectionPool,
-	 * para que muitos pools possam compartilhar o mesmo driver.
-	 *
-	 * @param props Propriedades do pool de conexao
-	 */
-	private void loadDrivers(Properties props) {
-		String driverClasses = props.getProperty("drivers");
-		StringTokenizer st = new StringTokenizer(driverClasses);
-		while (st.hasMoreElements()) {
-			String driverClassName = st.nextToken().trim();
-			try {
-				Driver driver = (Driver)
-					Class.forName(driverClassName).newInstance();
-				DriverManager.registerDriver(driver);
-				drivers.addElement(driver);
-				log("Registrado o driver JDBC: " + driverClassName);
-			}
-			catch (Exception e) {
-				log("Nao posso registrar o driver JDBC: " +
-					driverClassName + ", Exception: " + e);
-			}
-		}
-	}
-
-	/**
-	 * Cria instancias de DBConnectionPool baseado nas propriedades.
-	 * Um DBConnectionPool pode ser definido com as seguintes propriedades:
-	 * <PRE>
-	 * &lt;poolname&gt;.url         A URL do JDBC para o banco de dados
-	 * &lt;poolname&gt;.user        Um usuario do banco de dados (opcional)
-	 * &lt;poolname&gt;.password    Uma senha para o usuario do banco de dados (se o usuario foi especificado)
-	 * &lt;poolname&gt;.maxconn     O numero maximo de conexoes (opcional)
-	 * </PRE>
-	 *
-	 * @param props As propriedades do pool de conexoes
-	 */
-	private void createPools(Properties props) {
-		Enumeration propNames = props.propertyNames();
-		while (propNames.hasMoreElements()) {
-			String name = (String) propNames.nextElement();
-			if (name.endsWith(".url")) {
-				String poolName = name.substring(0, name.lastIndexOf("."));
-				String url = props.getProperty(poolName + ".url");
-				if (url == null) {
-					log("Nenhuma URL especificada para " + poolName);
-					continue;
-				}
-				String user = props.getProperty(poolName + ".user");
-				String password = props.getProperty(poolName + ".password");
-				String maxconn = props.getProperty(poolName + ".maxconn", "0");
-				int max;
-				try {
-					max = Integer.valueOf(maxconn).intValue();
-				}
-				catch (NumberFormatException e) {
-					log("Valor da propriedade maxconn invalido: " + maxconn + ", para " + poolName);
-					max = 0;
-				}
-				DBConnectionPool pool =
-					new DBConnectionPool(poolName, url, user, password, max);
-				pools.put(poolName, pool);
-				log("Pool de conexoes inicializado: " + poolName);
 			}
 		}
 	}
@@ -393,35 +328,6 @@ public class DBConnectionManager {
 			}
 			return con;
 		}
-
-		/**
-		 * Checks out a connection from the pool. If no free connection
-		 * is available, a new connection is created unless the max
-		 * number of connections has been reached. If a free connection
-		 * has been closed by the database, it's removed from the pool
-		 * and this method is called again recursively.
-		 * <P>
-		 * If no connection is available and the max number has been
-		 * reached, this method waits the specified time for one to be
-		 * checked in.
-		 *
-		 * @param timeout The timeout value in milliseconds
-		 */
-//		public synchronized Connection getConnection_(long timeout) {
-//			long startTime = new Date().getTime();
-//			Connection con;
-//			while ((con = getConnection()) == null) {
-//				try {
-//					wait(timeout);
-//				}
-//				catch (InterruptedException e) {}
-//				if ((new Date().getTime() - startTime) >= timeout) {
-//					// Timeout has expired
-//					return null;
-//				}
-//			}
-//			return con;
-//		}
 
 		/**
 		 * Fechar todas as conexoes disponiveis.

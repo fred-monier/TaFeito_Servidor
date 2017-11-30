@@ -3,8 +3,11 @@ package br.pe.recife.tafeito.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.pe.recife.tafeito.connectionpool.Contexto;
+import br.pe.recife.tafeito.connectionpool.DBConexao;
 import br.pe.recife.tafeito.connectionpool.DBConnectionManager;
 import br.pe.recife.tafeito.excecao.ConexaoBDException;
 
@@ -14,15 +17,14 @@ public class DBTaFeito {
 	private static DBTaFeito aInstancia = new DBTaFeito();
 		
 	private static DBConnectionManager connMgr;
+			
+	private static final String DRIVER = "org.postgresql.Driver";
 	
-	private static final String fonteDados = "ts";
-	
-	private static final String database = "jdbc:postgresql://127.0.0.1:5432/tafeito";
-	private static final String login = "postgres";
-	private static final String senha = "admin";
-	
-	
-    private static final String NOME_BANCO = "tafeito";
+	private static final String FONTE_DADOS = "tafeito";
+	private static final String URL = "jdbc:postgresql://127.0.0.1:5432/tafeito";
+	private static final String LOGIN = "postgres";
+	private static final String SENHA = "admin";
+	private static final int CONEXOES = 10;		   
 
     public static final String TABELA_ACESSO = "ACESSO";
     public static final String TABELA_ACESSO_COLUNA_ID = "ID";
@@ -72,6 +74,9 @@ public class DBTaFeito {
 
 	private DBTaFeito() {
 		super();
+		
+		//TODO - Inicializar via Servlet REST API
+		inicializarPool();
 	}
 
 	public static DBTaFeito getInstancia() {
@@ -83,7 +88,14 @@ public class DBTaFeito {
 	
 	public static void inicializarPool() {
 		if (DBTaFeito.connMgr == null) {
-			DBTaFeito.connMgr = DBConnectionManager.getInstance();
+			
+			List<String> drivers = new ArrayList<String>();
+			drivers.add(DRIVER);
+			
+			List<DBConexao> conexoes = new ArrayList<DBConexao>();
+			conexoes.add(new DBConexao(FONTE_DADOS, URL, LOGIN, SENHA, CONEXOES));
+			
+			DBTaFeito.connMgr = DBConnectionManager.getInstance(drivers, conexoes);
 		}
 	}
 
@@ -94,7 +106,7 @@ public class DBTaFeito {
 	public static Connection getConexao() {
 		Connection conexao = null;
 
-		conexao = DBTaFeito.connMgr.getConnection(DBTaFeito.fonteDados);
+		conexao = DBTaFeito.connMgr.getConnection(DBTaFeito.FONTE_DADOS);
 
 		return conexao;
 	}
@@ -110,7 +122,7 @@ public class DBTaFeito {
 				conexao = DBTaFeito.getConexao();
 
 				if (conexao == null) {
-					throw new ConexaoBDException("Não foi possível obter a conexão '" + DBTaFeito.fonteDados + "'.");
+					throw new ConexaoBDException("Não foi possível obter a conexão '" + DBTaFeito.FONTE_DADOS + "'.");
 				}
 
 				try {
@@ -151,7 +163,7 @@ public class DBTaFeito {
 					}
 
 				} finally {
-					DBTaFeito.connMgr.freeConnection(DBTaFeito.fonteDados, conexao);
+					DBTaFeito.connMgr.freeConnection(DBTaFeito.FONTE_DADOS, conexao);
 					pContexto.setConexao(null);
 				}
 
@@ -188,7 +200,7 @@ public class DBTaFeito {
 					}
 
 				} finally {
-					DBTaFeito.connMgr.freeConnection(DBTaFeito.fonteDados, conexao);
+					DBTaFeito.connMgr.freeConnection(DBTaFeito.FONTE_DADOS, conexao);
 					pContexto.setConexao(null);
 				}
 			}
@@ -206,5 +218,7 @@ public class DBTaFeito {
 			}
 		}
 	}
+	
+	
 
 }
