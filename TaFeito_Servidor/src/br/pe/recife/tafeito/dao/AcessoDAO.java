@@ -46,18 +46,14 @@ public class AcessoDAO {
         	Connection con = contexto.getConexao();
         	        	
         	String sql = "INSERT INTO " + DBTaFeito.TABELA_ACESSO + " VALUES (?, ?, ?)";
-        	pst = con.prepareStatement(sql, 
-        			new String[] {"" + DBTaFeito.TABELA_ACESSO_COLUNA_ID + ""});
+        	pst = con.prepareStatement(sql);
         	
         	pst.setLong(1, acesso.getId());
         	pst.setString(2, acesso.getLogin());
         	pst.setString(3, acesso.getSenha());
         	pst.executeUpdate();
         	
-        	rs = pst.getGeneratedKeys();
-        	if (rs.next()) {
-        	   id = rs.getLong(1);
-        	}     
+        	id = acesso.getId();  
         	
         	DBTaFeito.commitTransacao(contexto);
     	
@@ -142,10 +138,10 @@ public class AcessoDAO {
         	pst.setString(1, login);
         	pst.setString(2, senha);
         	
-        	rs = pst.executeQuery(sql);
+        	rs = pst.executeQuery();
                 
         	if (rs.next()) {
-        		res = rs.getLong(0);
+        		res = rs.getLong(1);
         	}
            
         	DBTaFeito.commitTransacao(contexto);
@@ -193,10 +189,10 @@ public class AcessoDAO {
         	pst.setString(1, login);
         	pst.setString(2, senha);
         	
-        	rs = pst.executeQuery(sql);
+        	rs = pst.executeQuery();
                 
         	if (rs.next()) {
-        		res = rs.getLong(0);
+        		res = rs.getLong(1);
         	}
            
         	DBTaFeito.commitTransacao(contexto);
@@ -238,7 +234,7 @@ public class AcessoDAO {
         	
         	pst.setString(1, login);
         	
-        	rs = pst.executeQuery(sql);
+        	rs = pst.executeQuery();
                 
         	if (rs.next()) {
         		res = true;
@@ -287,9 +283,9 @@ public class AcessoDAO {
 			while (rs.next()) {
 
 				Acesso acesso = new Acesso();
-				acesso.setId(rs.getLong(rs.findColumn(DBTaFeito.TABELA_ACESSO_COLUNA_ID)));
-				acesso.setLogin(rs.getString(rs.findColumn(DBTaFeito.TABELA_ACESSO_COLUNA_LOGIN)));
-				acesso.setSenha(rs.getString(rs.findColumn(DBTaFeito.TABELA_ACESSO_COLUNA_SENHA)));	        			        		
+				acesso.setId(rs.getLong(1));
+				acesso.setLogin(rs.getString(2));
+				acesso.setSenha(rs.getString(3));	        			        		
 
 				res.add(acesso);
 			}

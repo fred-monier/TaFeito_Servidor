@@ -55,17 +55,13 @@ public class FornecedorDAO implements IDAOson<Fornecedor> {
         	Connection con = contexto.getConexao();
         	        	
         	String sql = "INSERT INTO " + DBTaFeito.TABELA_FORNECEDOR + " VALUES (?, ?)";
-        	pst = con.prepareStatement(sql, 
-        			new String[] {"" + DBTaFeito.TABELA_FORNECEDOR_COLUNA_ID + ""});
+        	pst = con.prepareStatement(sql);
         	
         	pst.setLong(1, fornecedor.getId());
         	pst.setString(2, fornecedor.getCnpj());
         	pst.executeUpdate();
         	
-        	rs = pst.getGeneratedKeys();
-        	if (rs.next()) {
-        	   id = rs.getLong(1);
-        	}     
+        	id = fornecedor.getId();
         	
         	DBTaFeito.commitTransacao(contexto);
     	
@@ -96,7 +92,7 @@ public class FornecedorDAO implements IDAOson<Fornecedor> {
         	Connection con = contexto.getConexao();
         	
         	String sql = "UPDATE " + DBTaFeito.TABELA_FORNECEDOR + " SET ";
-        	sql = sql + DBTaFeito.TABELA_FORNECEDOR_COLUNA_CNPJ + " = ?, ";
+        	sql = sql + DBTaFeito.TABELA_FORNECEDOR_COLUNA_CNPJ + " = ? ";
         	sql = sql + "WHERE " + DBTaFeito.TABELA_FORNECEDOR_COLUNA_ID + " = ?";
     	
         	pst = con.prepareStatement(sql);
@@ -146,20 +142,20 @@ public class FornecedorDAO implements IDAOson<Fornecedor> {
 	    	
 	    	pst.setLong(1, id);    	
 	    	
-	    	rs = pst.executeQuery(sql);
+	    	rs = pst.executeQuery();
             
 	    	if (rs.next()) {
 	    		
 	            //
-	            long idCol = rs.getLong(0);
-	            String cnpjCol = rs.getString(1);
+	            long idCol = rs.getLong(1);
+	            String cnpjCol = rs.getString(2);
 
 	            //From USUARIO
-	            boolean habUsu = rs.getBoolean(3);
-	            String nomeUsu = rs.getString(4);
-	            String endUsu = rs.getString(5);
-	            String emailCol = rs.getString(6);
-	            int telCol = rs.getInt(7);
+	            boolean habUsu = rs.getBoolean(4);
+	            String nomeUsu = rs.getString(5);
+	            String endUsu = rs.getString(6);
+	            String emailCol = rs.getString(7);
+	            int telCol = rs.getInt(8);
 
 	            Fornecedor fornecedor = new Fornecedor();
 	            fornecedor.setId(idCol);
@@ -254,15 +250,15 @@ public class FornecedorDAO implements IDAOson<Fornecedor> {
 
 			while (rs.next()) {
 
-	            long idCol = rs.getLong(0);
-	            String cnpjCol = rs.getString(1);
+	            long idCol = rs.getLong(1);
+	            String cnpjCol = rs.getString(2);
 
 	            //From USUARIO
-	            boolean habUsu = rs.getBoolean(3);
-	            String nomeUsu = rs.getString(4);
-	            String endUsu = rs.getString(5);
-	            String emailCol = rs.getString(6);
-	            int telCol = rs.getInt(7);
+	            boolean habUsu = rs.getBoolean(4);
+	            String nomeUsu = rs.getString(5);
+	            String endUsu = rs.getString(6);
+	            String emailCol = rs.getString(7);
+	            int telCol = rs.getInt(8);
 
 	            Fornecedor fornecedor = new Fornecedor();
 	            fornecedor.setId(idCol);
@@ -328,19 +324,19 @@ public class FornecedorDAO implements IDAOson<Fornecedor> {
 	    	
 	    	pst.setLong(1, servCat.getId());    	
 	    	
-	    	rs = pst.executeQuery(sql);
+	    	rs = pst.executeQuery();
 
 			while (rs.next()) {
 
-	            long idCol = rs.getLong(0);
-	            String cnpjCol = rs.getString(1);
+	            long idCol = rs.getLong(1);
+	            String cnpjCol = rs.getString(2);
 
 	            //From USUARIO
-	            boolean habUsu = rs.getBoolean(3);
-	            String nomeUsu = rs.getString(4);
-	            String endUsu = rs.getString(5);
-	            String emailCol = rs.getString(6);
-	            int telCol = rs.getInt(7);
+	            boolean habUsu = rs.getBoolean(4);
+	            String nomeUsu = rs.getString(5);
+	            String endUsu = rs.getString(6);
+	            String emailCol = rs.getString(7);
+	            int telCol = rs.getInt(8);
 
 	            Fornecedor fornecedor = new Fornecedor();
 	            fornecedor.setId(idCol);

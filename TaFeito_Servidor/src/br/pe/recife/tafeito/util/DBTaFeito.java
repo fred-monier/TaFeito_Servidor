@@ -26,51 +26,59 @@ public class DBTaFeito {
 	private static final String SENHA = "admin";
 	private static final int CONEXOES = 10;		   
 
-    public static final String TABELA_ACESSO = "ACESSO";
-    public static final String TABELA_ACESSO_COLUNA_ID = "ID";
-    public static final String TABELA_ACESSO_COLUNA_LOGIN = "LOGIN";
-    public static final String TABELA_ACESSO_COLUNA_SENHA = "SENHA";
+    public static final String TABELA_ACESSO = "\"ACESSO\"";
+    public static final String TABELA_ACESSO_COLUNA_ID_RET = "ID";
+    public static final String TABELA_ACESSO_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_ACESSO_COLUNA_LOGIN = "\"LOGIN\"";
+    public static final String TABELA_ACESSO_COLUNA_SENHA = "\"SENHA\"";
 
-    public static final String TABELA_USUARIO = "USUARIO";
-    public static final String TABELA_USUARIO_COLUNA_ID = "ID";
-    public static final String TABELA_USUARIO_COLUNA_HABILITADO = "HABILITADO";
-    public static final String TABELA_USUARIO_COLUNA_NOME = "NOME";
-    public static final String TABELA_USUARIO_COLUNA_ENDERECO = "ENDERECO";
-    public static final String TABELA_USUARIO_COLUNA_EMAIL = "EMAIL";
-    public static final String TABELA_USUARIO_COLUNA_TELEFONE = "TELEFONE";
+    public static final String TABELA_USUARIO = "\"USUARIO\"";
+    public static final String TABELA_USUARIO_COLUNA_ID_RET = "ID";
+    public static final String TABELA_USUARIO_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_USUARIO_COLUNA_HABILITADO = "\"HABILITADO\"";
+    public static final String TABELA_USUARIO_COLUNA_NOME = "\"NOME\"";
+    public static final String TABELA_USUARIO_COLUNA_ENDERECO = "\"ENDERECO\"";
+    public static final String TABELA_USUARIO_COLUNA_EMAIL = "\"EMAIL\"";
+    public static final String TABELA_USUARIO_COLUNA_TELEFONE = "\"TELEFONE\"";
 
-    public static final String TABELA_FORNECEDOR = "FORNECEDOR";
-    public static final String TABELA_FORNECEDOR_COLUNA_ID = "ID";
-    public static final String TABELA_FORNECEDOR_COLUNA_CNPJ = "CNPJ";
+    public static final String TABELA_FORNECEDOR = "\"FORNECEDOR\"";
+    public static final String TABELA_FORNECEDOR_COLUNA_ID_RET = "ID";
+    public static final String TABELA_FORNECEDOR_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_FORNECEDOR_COLUNA_CNPJ = "\"CNPJ\"";
 
-    public static final String TABELA_CLIENTE = "CLIENTE";
-    public static final String TABELA_CLIENTE_COLUNA_ID = "ID";
-    public static final String TABELA_CLIENTE_COLUNA_CPF = "CPF";
+    public static final String TABELA_CLIENTE = "\"CLIENTE\"";
+    public static final String TABELA_CLIENTE_COLUNA_ID_RET = "ID";
+    public static final String TABELA_CLIENTE_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_CLIENTE_COLUNA_CPF = "\"CPF\"";
 
-    public static final String TABELA_SERVICO_CATEGORIA = "SERVICO_CATEGORIA";
-    public static final String TABELA_SERVICO_CATEGORIA_COLUNA_ID = "ID";
-    public static final String TABELA_SERVICO_CATEGORIA_COLUNA_NOME = "NOME";
-    public static final String TABELA_SERVICO_CATEGORIA_COLUNA_DESCRICAO = "DESCRICAO";
+    public static final String TABELA_SERVICO_CATEGORIA = "\"SERVICO_CATEGORIA\"";
+    public static final String TABELA_SERVICO_CATEGORIA_COLUNA_ID_RET = "ID";
+    public static final String TABELA_SERVICO_CATEGORIA_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_SERVICO_CATEGORIA_COLUNA_NOME = "\"NOME\"";
+    public static final String TABELA_SERVICO_CATEGORIA_COLUNA_DESCRICAO = "\"DESCRICAO\"";
 
-    public static final String TABELA_SERVICO = "SERVICO";
-    public static final String TABELA_SERVICO_COLUNA_ID = "ID";
-    public static final String TABELA_SERVICO_COLUNA_ID_SERVICO_CATEGORIA = "ID_SERVICO_CATEGORIA";
-    public static final String TABELA_SERVICO_COLUNA_ID_FORNECEDOR = "ID_FORNECEDOR";
-    public static final String TABELA_SERVICO_COLUNA_NOME = "NOME";
-    public static final String TABELA_SERVICO_COLUNA_DESCRICAO = "DESCRICAO";
+    public static final String TABELA_SERVICO = "\"SERVICO\"";
+    public static final String TABELA_SERVICO_COLUNA_ID_RET = "ID";
+    public static final String TABELA_SERVICO_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_SERVICO_COLUNA_ID_SERVICO_CATEGORIA = "\"ID_SERVICO_CATEGORIA\"";
+    public static final String TABELA_SERVICO_COLUNA_ID_FORNECEDOR = "\"ID_FORNECEDOR\"";
+    public static final String TABELA_SERVICO_COLUNA_NOME = "\"NOME\"";
+    public static final String TABELA_SERVICO_COLUNA_DESCRICAO = "\"DESCRICAO\"";
 
-    public static final String TABELA_OFERTA = "OFERTA";
-    public static final String TABELA_OFERTA_COLUNA_ID = "ID";
-    public static final String TABELA_OFERTA_COLUNA_ID_SERVICO = "ID_SERVICO";    
-    public static final String TABELA_OFERTA_COLUNA_DATA_HORA_INICIO = "DATA_HORA_INICIO";
-    public static final String TABELA_OFERTA_COLUNA_DATA_HORA_FIM = "DATA_HORA_FIM";
+    public static final String TABELA_OFERTA = "\"OFERTA\"";
+    public static final String TABELA_OFERTA_COLUNA_ID_RET = "ID";
+    public static final String TABELA_OFERTA_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_OFERTA_COLUNA_ID_SERVICO = "\"ID_SERVICO\"";    
+    public static final String TABELA_OFERTA_COLUNA_DATA_HORA_INICIO = "\"DATA_HORA_INICIO\"";
+    public static final String TABELA_OFERTA_COLUNA_DATA_HORA_FIM = "\"DATA_HORA_FIM\"";
 
-    public static final String TABELA_AGENDAMENTO = "AGENDAMENTO";
-    public static final String TABELA_AGENDAMENTO_COLUNA_ID = "ID";
-    public static final String TABELA_AGENDAMENTO_COLUNA_ID_OFERTA = "ID_OFERTA";
-    public static final String TABELA_AGENDAMENTO_COLUNA_ID_CLIENTE = "ID_AGENDAMENTO";
-    public static final String TABELA_AGENDAMENTO_COLUNA_DATA_HORA_REALIZADO = "DATA_HORA_REALIZADO";
-    public static final String TABELA_AGENDAMENTO_COLUNA_DATA_HORA_CANCELADO = "DATA_HORA_CANCELADO";
+    public static final String TABELA_AGENDAMENTO = "\"AGENDAMENTO\"";
+    public static final String TABELA_AGENDAMENTO_COLUNA_ID_RET = "ID";
+    public static final String TABELA_AGENDAMENTO_COLUNA_ID = "\"ID\"";
+    public static final String TABELA_AGENDAMENTO_COLUNA_ID_OFERTA = "\"ID_OFERTA\"";
+    public static final String TABELA_AGENDAMENTO_COLUNA_ID_CLIENTE = "\"ID_AGENDAMENTO\"";
+    public static final String TABELA_AGENDAMENTO_COLUNA_DATA_HORA_REALIZADO = "\"DATA_HORA_REALIZADO\"";
+    public static final String TABELA_AGENDAMENTO_COLUNA_DATA_HORA_CANCELADO = "\"DATA_HORA_CANCELADO\"";
 
 	private DBTaFeito() {
 		super();

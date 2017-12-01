@@ -45,9 +45,14 @@ public class UsuarioDAO implements IDAO<Usuario> {
     		
         	Connection con = contexto.getConexao();
         	        	
-        	String sql = "INSERT INTO " + DBTaFeito.TABELA_USUARIO + " VALUES (?, ?, ?, ?, ?)";
+        	String sql = "INSERT INTO " + DBTaFeito.TABELA_USUARIO;
+        	sql = sql + "(" + DBTaFeito.TABELA_USUARIO_COLUNA_HABILITADO + ", ";
+        	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_NOME + ", ";
+        	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_ENDERECO + ", ";
+        	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_EMAIL + ", ";
+        	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_TELEFONE + ") VALUES (?, ?, ?, ?, ?)";
         	pst = con.prepareStatement(sql, 
-        			new String[] {"" + DBTaFeito.TABELA_USUARIO_COLUNA_ID + ""});
+        			new String[] {"" + DBTaFeito.TABELA_USUARIO_COLUNA_ID_RET + ""});
         	
         	pst.setBoolean(1, usuario.isHabilitado());
         	pst.setString(2, usuario.getNome());
@@ -61,6 +66,10 @@ public class UsuarioDAO implements IDAO<Usuario> {
         	if (rs.next()) {
         	   id = rs.getLong(1);
         	}     
+        	
+            if (id != -1) {
+                usuario.setId(id);
+            }        	
         	
         	DBTaFeito.commitTransacao(contexto);
     	
@@ -95,7 +104,7 @@ public class UsuarioDAO implements IDAO<Usuario> {
         	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_NOME + " = ?, ";
         	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_ENDERECO + " = ?, ";
         	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_EMAIL + " = ?, ";
-        	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_TELEFONE + " = ?, ";        	
+        	sql = sql + DBTaFeito.TABELA_USUARIO_COLUNA_TELEFONE + " = ? ";        	
         	
         	sql = sql + "WHERE " + DBTaFeito.TABELA_USUARIO_COLUNA_ID + " = ?";
     	
@@ -106,6 +115,7 @@ public class UsuarioDAO implements IDAO<Usuario> {
         	pst.setString(3, usuario.getEndereco());
         	pst.setString(4, usuario.getEmail());
         	pst.setInt(5, usuario.getTelefone());
+        	pst.setLong(6, usuario.getId());
         	
         	pst.executeUpdate();
         	        	
@@ -162,17 +172,17 @@ public class UsuarioDAO implements IDAO<Usuario> {
 	    	
 	    	pst.setLong(1, id);    	
 	    	
-	    	rs = pst.executeQuery(sql);
+	    	rs = pst.executeQuery();
             
 	    	if (rs.next()) {
 	    		
 	            //
-	            long idCol = rs.getLong(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_ID));
-	            boolean habCol = rs.getBoolean(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_HABILITADO));
-	            String nomeCol = rs.getString(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_NOME));
-	            String endCol = rs.getString(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_ENDERECO));
-	            String emailCol = rs.getString(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_EMAIL));
-	            int telCol = rs.getInt(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_TELEFONE));
+	            long idCol = rs.getLong(1);
+	            boolean habCol = rs.getBoolean(2);
+	            String nomeCol = rs.getString(3);
+	            String endCol = rs.getString(4);
+	            String emailCol = rs.getString(5);
+	            int telCol = rs.getInt(6);
 
 	            Usuario usuario = new Usuario();
 	            usuario.setId(idCol);
@@ -227,13 +237,13 @@ public class UsuarioDAO implements IDAO<Usuario> {
 
 			while (rs.next()) {
 
-	            //
-	            long idCol = rs.getLong(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_ID));
-	            boolean habCol = rs.getBoolean(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_HABILITADO));
-	            String nomeCol = rs.getString(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_NOME));
-	            String endCol = rs.getString(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_ENDERECO));
-	            String emailCol = rs.getString(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_EMAIL));
-	            int telCol = rs.getInt(rs.findColumn(DBTaFeito.TABELA_USUARIO_COLUNA_TELEFONE));
+	            //	            
+	            long idCol = rs.getLong(1);
+	            boolean habCol = rs.getBoolean(2);
+	            String nomeCol = rs.getString(3);
+	            String endCol = rs.getString(4);
+	            String emailCol = rs.getString(5);
+	            int telCol = rs.getInt(6);
 
 	            Usuario usuario = new Usuario();
 	            usuario.setId(idCol);

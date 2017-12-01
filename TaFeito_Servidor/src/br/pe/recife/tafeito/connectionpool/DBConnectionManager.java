@@ -1,5 +1,6 @@
 package br.pe.recife.tafeito.connectionpool;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -60,8 +61,13 @@ public class DBConnectionManager {
 	private void init(List<String> jdbcDrivers, List<DBConexao> jdbcConnections) {
 		
 		URL url = getClass().getClassLoader().getResource("classes");
-
-		String logFile = url.getPath() + "/DBConnectionManagerTaFeito.log";		
+		
+		String logFile;
+		if (url != null) {
+			logFile = url.getPath() + "/DBConnectionManagerTaFeito.log";
+		} else {
+			logFile = "C:/tmp/DBConnectionManagerTaFeito.log";
+		}
 		
 		try {
 			log = new PrintWriter(new FileWriter(logFile, true), true);

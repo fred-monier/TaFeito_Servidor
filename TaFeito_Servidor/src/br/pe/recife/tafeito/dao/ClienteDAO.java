@@ -53,18 +53,14 @@ public class ClienteDAO implements IDAOson<Cliente> {
     		
         	Connection con = contexto.getConexao();
         	        	
-        	String sql = "INSERT INTO " + DBTaFeito.TABELA_CLIENTE + " VALUES (?, ?)";
-        	pst = con.prepareStatement(sql, 
-        			new String[] {"" + DBTaFeito.TABELA_CLIENTE_COLUNA_ID + ""});
+        	String sql = "INSERT INTO " + DBTaFeito.TABELA_CLIENTE + " VALUES (?, ?)";        	      	
+        	pst = con.prepareStatement(sql);         			
         	
         	pst.setLong(1, cliente.getId());
         	pst.setString(2, cliente.getCpf());
         	pst.executeUpdate();
         	
-        	rs = pst.getGeneratedKeys();
-        	if (rs.next()) {
-        	   id = rs.getLong(1);
-        	}     
+      	    id = cliente.getId();             	        	
         	
         	DBTaFeito.commitTransacao(contexto);
     	
@@ -95,7 +91,7 @@ public class ClienteDAO implements IDAOson<Cliente> {
         	Connection con = contexto.getConexao();
         	
         	String sql = "UPDATE " + DBTaFeito.TABELA_CLIENTE + " SET ";
-        	sql = sql + DBTaFeito.TABELA_CLIENTE_COLUNA_CPF + " = ?, ";
+        	sql = sql + DBTaFeito.TABELA_CLIENTE_COLUNA_CPF + " = ? ";
         	sql = sql + "WHERE " + DBTaFeito.TABELA_CLIENTE_COLUNA_ID + " = ?";
     	
         	pst = con.prepareStatement(sql);
@@ -145,20 +141,20 @@ public class ClienteDAO implements IDAOson<Cliente> {
 	    	
 	    	pst.setLong(1, id);    	
 	    	
-	    	rs = pst.executeQuery(sql);
+	    	rs = pst.executeQuery();
             
 	    	if (rs.next()) {
 	    		
 	            //
-	            long idCol = rs.getLong(0);
-	            String cpfCol = rs.getString(1);
+	            long idCol = rs.getLong(1);
+	            String cpfCol = rs.getString(2);
 
 	            //From USUARIO
-	            boolean habUsu = rs.getBoolean(3);
-	            String nomeUsu = rs.getString(4);
-	            String endUsu = rs.getString(5);
-	            String emailCol = rs.getString(6);
-	            int telCol = rs.getInt(7);
+	            boolean habUsu = rs.getBoolean(4);
+	            String nomeUsu = rs.getString(5);
+	            String endUsu = rs.getString(6);
+	            String emailCol = rs.getString(7);
+	            int telCol = rs.getInt(8);
 
 	            Cliente cliente = new Cliente();
 	            cliente.setId(idCol);
@@ -253,15 +249,15 @@ public class ClienteDAO implements IDAOson<Cliente> {
 
 			while (rs.next()) {
 
-	            long idCol = rs.getLong(0);
-	            String cpfCol = rs.getString(1);
+	            long idCol = rs.getLong(1);
+	            String cpfCol = rs.getString(2);
 
 	            //From USUARIO
-	            boolean habUsu = rs.getBoolean(3);
-	            String nomeUsu = rs.getString(4);
-	            String endUsu = rs.getString(5);
-	            String emailCol = rs.getString(6);
-	            int telCol = rs.getInt(7);
+	            boolean habUsu = rs.getBoolean(4);
+	            String nomeUsu = rs.getString(5);
+	            String endUsu = rs.getString(6);
+	            String emailCol = rs.getString(7);
+	            int telCol = rs.getInt(8);
 
 	            Cliente cliente = new Cliente();
 	            cliente.setId(idCol);
