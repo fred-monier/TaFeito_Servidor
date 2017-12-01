@@ -16,14 +16,8 @@ import br.pe.recife.tafeito.util.DBTaFeito;
 
 public class AcessoDAO {
 
-    private static AcessoDAO instancia;
+    private static AcessoDAO instancia;    
     
-    //private DBTaFeito bd;   
-    
-    private Statement st;
-    private PreparedStatement pst;
-	private ResultSet rs;
-
     public static AcessoDAO getInstancia() {
 
         if (instancia == null) {
@@ -33,17 +27,19 @@ public class AcessoDAO {
         return instancia;
     }
 
-    private AcessoDAO() {
-        //this.bd = DBTaFeito.getInstancia();
+    private AcessoDAO() {       
     }
     
-    public long inserir(Acesso acesso) throws InfraException {
+    public long inserir(Acesso acesso) throws InfraException {    	
+    	
+    	PreparedStatement pst = null;
+    	ResultSet rs = null;
     	
     	long id = 0;
     	
     	Contexto contexto = new Contexto();    	
     	
-    	try {
+    	try {    		
     	
     		DBTaFeito.beginTransacao(contexto);
     		
@@ -81,6 +77,8 @@ public class AcessoDAO {
     
     public void atualizar(Acesso acesso) throws InfraException {    
     	
+    	PreparedStatement pst = null;
+    	
     	Contexto contexto = new Contexto();    	
     	
     	try {
@@ -98,7 +96,7 @@ public class AcessoDAO {
         	        	
         	pst.setString(1, acesso.getLogin());
         	pst.setString(2, acesso.getSenha());
-        	pst.setLong(1, acesso.getId());
+        	pst.setLong(3, acesso.getId());
         	pst.executeUpdate();
         	        	
         	DBTaFeito.commitTransacao(contexto);
@@ -117,7 +115,10 @@ public class AcessoDAO {
     
     public long buscarPorLoginPorSenhaFornecedor(String login, String senha) throws InfraException {
 
-        long res = 0;
+    	PreparedStatement pst = null;
+    	ResultSet rs = null;
+
+    	long res = 0;
         
         Contexto contexto = new Contexto();
         
@@ -141,7 +142,7 @@ public class AcessoDAO {
         	pst.setString(1, login);
         	pst.setString(2, senha);
         	
-        	ResultSet rs = pst.executeQuery(sql);
+        	rs = pst.executeQuery(sql);
                 
         	if (rs.next()) {
         		res = rs.getLong(0);
@@ -165,6 +166,9 @@ public class AcessoDAO {
             
 	public long buscarPorLoginPorSenhaCliente(String login, String senha) throws InfraException {
 
+    	PreparedStatement pst = null;
+    	ResultSet rs = null;
+		
         long res = 0;
         
         Contexto contexto = new Contexto();
@@ -189,7 +193,7 @@ public class AcessoDAO {
         	pst.setString(1, login);
         	pst.setString(2, senha);
         	
-        	ResultSet rs = pst.executeQuery(sql);
+        	rs = pst.executeQuery(sql);
                 
         	if (rs.next()) {
         		res = rs.getLong(0);
@@ -213,6 +217,9 @@ public class AcessoDAO {
 	
 	public boolean existePorLogin(String login) throws InfraException {
 		
+    	PreparedStatement pst = null;
+    	ResultSet rs = null;
+		
 		boolean res = false;
 		
         Contexto contexto = new Contexto();
@@ -231,7 +238,7 @@ public class AcessoDAO {
         	
         	pst.setString(1, login);
         	
-        	ResultSet rs = pst.executeQuery(sql);
+        	rs = pst.executeQuery(sql);
                 
         	if (rs.next()) {
         		res = true;
@@ -255,6 +262,9 @@ public class AcessoDAO {
 	}
 	
 	public List<Acesso> listar() throws InfraException {
+		
+    	Statement st = null;
+    	ResultSet rs = null;
 
 		List<Acesso> res = new ArrayList<Acesso>();
 
@@ -272,7 +282,7 @@ public class AcessoDAO {
 
 			st = con.createStatement();	        		        
 
-			ResultSet rs = st.executeQuery(sql);
+			rs = st.executeQuery(sql);
 
 			while (rs.next()) {
 
