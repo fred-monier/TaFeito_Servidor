@@ -144,7 +144,38 @@ public class UsuarioDAO implements IDAO<Usuario> {
 
 	@Override
 	public void excluir(Usuario entidade) throws InfraException {
-		// TODO Auto-generated method stub
+		
+		PreparedStatement pst = null;	
+	    
+	    Contexto contexto = new Contexto();
+	    
+	    try {
+	    	
+			DBTaFeito.beginTransacao(contexto);
+			
+	    	Connection con = contexto.getConexao();
+	
+	        String sql = "DELETE FROM " + DBTaFeito.TABELA_USUARIO;
+	
+	        sql = sql + " WHERE " + DBTaFeito.TABELA_USUARIO + "." + DBTaFeito.TABELA_USUARIO_COLUNA_ID + " = ?";
+	        
+	        pst = con.prepareStatement(sql); 
+	        
+	        pst.setLong(1, entidade.getId());
+	        
+	        pst.executeUpdate();
+	        
+        	DBTaFeito.commitTransacao(contexto);
+        	
+    	} catch (ConexaoBDException e) {    		
+    		throw new InfraException(e.getMessage(), e);
+    		
+    	} catch (SQLException e) {
+    		throw new InfraException(e.getMessage(), e);
+    		
+    	} finally {			
+			this.liberarRecursoBanco(pst);
+		}   	
 		
 	}
 

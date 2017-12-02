@@ -21,6 +21,9 @@ public interface IFachadaTaFeito {
     Autenticacao buscarPorLoginPorSenhaFornecedorAcesso(String login, String senha) throws InfraException, NegocioException;
     Autenticacao buscarPorLoginPorSenhaClienteAcesso(String login, String senha) throws InfraException, NegocioException;
     boolean existePorLoginAcesso(String login) throws InfraException;
+    Acesso consultarAcesso(long id, Autenticacao autenticacao) throws InfraException, NegocioException;
+    void excluirAcessoCliente(Acesso acesso, Autenticacao autenticacao) throws InfraException;
+    void excluirAcessoFornecedor(Acesso acesso, Autenticacao autenticacao) throws InfraException;
     List<Acesso> listarAcesso() throws InfraException;
 
     //FornecedorService

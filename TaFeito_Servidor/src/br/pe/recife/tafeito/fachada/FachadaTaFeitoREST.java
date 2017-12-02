@@ -70,6 +70,24 @@ public class FachadaTaFeitoREST implements IFachadaTaFeito {
 		
 		return this.acessoService.existePorLogin(login);
 	}
+	
+	@Override
+	public Acesso consultarAcesso(long id, Autenticacao autenticacao) throws InfraException, NegocioException {
+		
+		return this.acessoService.consultar(id);
+	}
+
+	@Override
+	public void excluirAcessoCliente(Acesso acesso, Autenticacao autenticacao) throws InfraException {
+		
+		this.acessoService.excluirCliente(acesso);
+	}
+
+	@Override
+	public void excluirAcessoFornecedor(Acesso acesso, Autenticacao autenticacao) throws InfraException {
+		
+		this.acessoService.excluirFornecedor(acesso);
+	}
 
 	@Override
 	public List<Acesso> listarAcesso() throws InfraException {

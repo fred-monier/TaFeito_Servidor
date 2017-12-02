@@ -257,6 +257,98 @@ public class AcessoDAO {
 		return res;
 	}
 	
+    public Acesso consultar(long id) throws InfraException {
+
+    	PreparedStatement pst = null;
+    	ResultSet rs = null;
+
+    	Acesso res = null;
+        
+        Contexto contexto = new Contexto();
+        
+        try {
+        	
+    		DBTaFeito.beginTransacao(contexto);
+    		
+        	Connection con = contexto.getConexao();
+
+	        String sql = "SELECT * FROM " + DBTaFeito.TABELA_ACESSO;
+	
+	        sql = sql + " WHERE " + DBTaFeito.TABELA_ACESSO + "." + DBTaFeito.TABELA_ACESSO_COLUNA_ID + " = ?";
+	        
+	        pst = con.prepareStatement(sql);
+	    	
+	    	pst.setLong(1, id);    	
+	    	
+	    	rs = pst.executeQuery();
+            
+	    	if (rs.next()) {
+	    		
+	            //
+	            long idCol = rs.getLong(1);
+	            String loginCol = rs.getString(2);
+	            String senhaCol = rs.getString(3);
+
+	            Acesso acesso = new Acesso();
+	            acesso.setId(idCol);
+	            acesso.setLogin(loginCol);
+	            acesso.setSenha(senhaCol);
+
+	            res = acesso;	    			    	
+	    	}
+	       
+	    	DBTaFeito.commitTransacao(contexto);
+	    	
+		} catch (ConexaoBDException e) {    		
+			throw new InfraException(e.getMessage(), e);
+			
+		} catch (SQLException e) {
+			throw new InfraException(e.getMessage(), e);
+			
+		} finally {			
+			this.liberarRecursoBanco(pst);
+			this.liberarRecursoBanco(rs);					
+		}	
+	            
+	    return res;
+                        
+    }    	
+	
+    public void excluir(Acesso acesso) throws InfraException  {
+        
+		PreparedStatement pst = null;	
+	    
+	    Contexto contexto = new Contexto();
+	    
+	    try {
+	    	
+			DBTaFeito.beginTransacao(contexto);
+			
+	    	Connection con = contexto.getConexao();
+	
+	        String sql = "DELETE FROM " + DBTaFeito.TABELA_ACESSO;
+	
+	        sql = sql + " WHERE " + DBTaFeito.TABELA_ACESSO + "." + DBTaFeito.TABELA_ACESSO_COLUNA_ID + " = ?";
+	        
+	        pst = con.prepareStatement(sql); 
+	        
+	        pst.setLong(1, acesso.getId());
+	        
+	        pst.executeUpdate();
+	        
+        	DBTaFeito.commitTransacao(contexto);
+        	
+    	} catch (ConexaoBDException e) {    		
+    		throw new InfraException(e.getMessage(), e);
+    		
+    	} catch (SQLException e) {
+    		throw new InfraException(e.getMessage(), e);
+    		
+    	} finally {			
+			this.liberarRecursoBanco(pst);
+		}   	 
+    }	
+	
 	public List<Acesso> listar() throws InfraException {
 		
     	Statement st = null;

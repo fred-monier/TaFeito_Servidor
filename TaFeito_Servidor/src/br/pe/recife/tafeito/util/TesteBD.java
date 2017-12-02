@@ -104,7 +104,7 @@ public class TesteBD {
             System.out.println("***");
 
             //1 exclusão do alterado
-            fachada.excluirCliente(cliente2, autenticacao);            
+            fachada.excluirAcessoCliente(fachada.consultarAcesso(cliente2.getId(), autenticacao), autenticacao);            
             System.out.println("Cliente2 excluído com sucesso.");
             System.out.println("***");
 
@@ -204,7 +204,7 @@ public class TesteBD {
             System.out.println("***");
 
             //1 exclusão do alterado
-            fachada.excluirFornecedor(fornecedor2, autenticacao);
+            fachada.excluirAcessoFornecedor(fachada.consultarAcesso(fornecedor2.getId(), autenticacao), autenticacao); 
             System.out.println("Fornecedor2 excluído com sucesso.");
             System.out.println("***");
 

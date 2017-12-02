@@ -13,7 +13,7 @@ public class ClienteService {
 
     private ClienteDAO clienteDao;
 
-    private UsuarioService usuarioService;
+    private UsuarioService usuarioService;    
 
     public static ClienteService getInstancia() {
 
@@ -26,7 +26,7 @@ public class ClienteService {
 
     private ClienteService() {
         this.clienteDao = ClienteDAO.getInstancia();
-        this.usuarioService = UsuarioService.getInstancia();
+        this.usuarioService = UsuarioService.getInstancia();        
     }
 
     public void salvar(Cliente cliente) throws InfraException, NegocioException {
@@ -85,7 +85,8 @@ public class ClienteService {
             //if (res <= 0) {
             //    throw new NegocioException("excecao_objeto_nao_excluido");
             //}
-        	usuarioService.excluir(cliente);
+        	usuarioService.excluir(cliente);        	
+        	
 
         } catch (Exception e) {
             throw new InfraException(e.getMessage(), e);

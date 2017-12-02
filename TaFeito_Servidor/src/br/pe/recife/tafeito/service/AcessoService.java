@@ -159,6 +159,56 @@ public class AcessoService {
 
         return res;
     }
+    
+    public Acesso consultar(long id) throws InfraException, NegocioException {
+
+        Acesso res = null;
+
+        try {
+
+            res = acessoDao.consultar(id);
+
+            if (res == null) {
+                throw new NegocioException("excecao_objeto_nao_encontrado");
+            }
+        } catch (NegocioException e) {
+            throw  e;
+        } catch (Exception e) {
+            throw new InfraException(e.getMessage(), e);
+        }
+
+        return res;
+
+    }    
+    
+    public void excluirCliente(Acesso acesso) throws InfraException {
+
+        try {
+
+        	acessoDao.excluir(acesso);
+        	        	            
+            clienteService.excluir(clienteService.consultar(acesso.getId()));
+
+        } catch (Exception e) {
+            throw new InfraException(e.getMessage(), e);
+        }
+
+    }
+    
+    public void excluirFornecedor(Acesso acesso) throws InfraException {
+
+        try {
+
+        	acessoDao.excluir(acesso);
+        	
+        	fornecedorService.excluir(fornecedorService.consultar(acesso.getId()));      	
+
+        } catch (Exception e) {
+            throw new InfraException(e.getMessage(), e);
+        }
+
+    }    
+    
 
     public List<Acesso> listar() throws InfraException {
 
