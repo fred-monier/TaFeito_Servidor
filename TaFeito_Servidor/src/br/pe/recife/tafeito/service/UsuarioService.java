@@ -1,16 +1,21 @@
 package br.pe.recife.tafeito.service;
 
 import java.util.List;
+import javax.ws.rs.GET; 
+import javax.ws.rs.Path; 
+import javax.ws.rs.Produces; 
+import javax.ws.rs.core.MediaType; 
 
 import br.pe.recife.tafeito.dao.UsuarioDAO;
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
 import br.pe.recife.tafeito.negocio.Usuario;
-
+@Path("/UsuarioService")
+ 
 public class UsuarioService {
 
     private static UsuarioService instancia;
-    private UsuarioDAO usuarioDao;
+    private UsuarioDAO usuarioDao = UsuarioDAO.getInstancia();
 
     public static UsuarioService getInstancia() {
 
@@ -20,10 +25,10 @@ public class UsuarioService {
 
         return instancia;
     }
-
-    private UsuarioService() {
-        this.usuarioDao = UsuarioDAO.getInstancia();
-    }
+    
+//    public UsuarioService() {
+//        this.usuarioDao = UsuarioDAO.getInstancia();
+//    }
 
     public void salvar(Usuario usuario) throws InfraException, NegocioException {
 
@@ -75,6 +80,10 @@ public class UsuarioService {
 
     }
 
+    
+    @GET 
+    @Path("/usuarios") 
+    @Produces(MediaType.APPLICATION_XML)      
     public List<Usuario> listar() throws InfraException{
 
         try {

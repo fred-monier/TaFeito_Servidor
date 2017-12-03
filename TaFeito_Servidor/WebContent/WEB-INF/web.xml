@@ -4,13 +4,14 @@
    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"  
    id = "WebApp_ID" version = "3.0"> 
-   <display-name>User Management</display-name> 
+   <display-name>TaFeito Servidor</display-name> 
    <servlet> 
       <servlet-name>Jersey RESTful Application</servlet-name> 
       <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class> 
       <init-param> 
          <param-name>jersey.config.server.provider.packages</param-name> 
-         <param-value>com.tutorialspoint</param-value> 
+         <!-- param-value>com.tutorialspoint</param-value -->          
+         <param-value>br.pe.recife.tafeito.service</param-value>
       </init-param> 
    </servlet> 
    <servlet-mapping> 

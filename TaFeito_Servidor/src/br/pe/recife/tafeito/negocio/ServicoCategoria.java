@@ -41,7 +41,7 @@ public class ServicoCategoria implements Serializable {
 
         String res = "ID: " + this.getId() + System.getProperty("line.separator");
         res = res + "Nome: " + this.getNome() + System.getProperty("line.separator");
-        res = res + "Descrição: " + this.getDescricao();
+        res = res + "Descricao: " + this.getDescricao();
 
         return res;
     }

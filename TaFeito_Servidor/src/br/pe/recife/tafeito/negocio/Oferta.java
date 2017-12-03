@@ -57,7 +57,7 @@ public class Oferta implements Serializable {
         SimpleDateFormat df = new SimpleDateFormat("yy-MM-dd:HH:mm");
 
         String res = "ID: " + this.getId() + System.getProperty("line.separator");
-        res = res + "Serviço: " + System.getProperty("line.separator");
+        res = res + "Servico: " + System.getProperty("line.separator");
         res = res + this.getServico().toPrint() + System.getProperty("line.separator");
         res = res + "Data Hora Início: " + df.format(this.getDataHoraInicio()) + System.getProperty("line.separator");
         res = res + "Data Hora Fim: " + df.format(this.getDataHoraFim());

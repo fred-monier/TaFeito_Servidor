@@ -2,6 +2,10 @@ package br.pe.recife.tafeito.negocio;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlElement; 
+import javax.xml.bind.annotation.XmlRootElement; 
+@XmlRootElement(name = "usuario")
+
 public class Usuario implements Serializable {
 
     private long id;
@@ -15,6 +19,8 @@ public class Usuario implements Serializable {
         return id;
     }
 
+    
+    @XmlElement
     public void setId(long id) {
         this.id = id;
     }
@@ -23,6 +29,8 @@ public class Usuario implements Serializable {
         return habilitado;
     }
 
+    
+    @XmlElement
     public void setHabilitado(boolean habilitado) {
         this.habilitado = habilitado;
     }
@@ -31,6 +39,8 @@ public class Usuario implements Serializable {
         return nome;
     }
 
+    
+    @XmlElement
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -39,6 +49,8 @@ public class Usuario implements Serializable {
         return endereco;
     }
 
+    
+    @XmlElement
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
@@ -46,7 +58,8 @@ public class Usuario implements Serializable {
     public String getEmail() {
         return email;
     }
-
+    
+    @XmlElement
     public void setEmail(String email) {
         this.email = email;
     }
@@ -55,6 +68,8 @@ public class Usuario implements Serializable {
         return telefone;
     }
 
+    
+    @XmlElement    
     public void setTelefone(int telefone) {
         this.telefone = telefone;
     }
@@ -69,7 +84,7 @@ public class Usuario implements Serializable {
         String res = "ID: " + this.getId() + System.getProperty("line.separator");
         res = res + "Habilitado: " + this.isHabilitado() + System.getProperty("line.separator");
         res = res + "Nome: " + this.getNome() + System.getProperty("line.separator");
-        res = res + "Endereço: " + this.getEndereco() + System.getProperty("line.separator");
+        res = res + "Endereco: " + this.getEndereco() + System.getProperty("line.separator");
         res = res + "Email: " + this.getEmail() + System.getProperty("line.separator");
         res = res + "Telefone: " + this.getTelefone();
 

@@ -58,12 +58,12 @@ public class Servico implements Serializable {
     public String toPrint() {
 
         String res = "ID: " + this.getId() + System.getProperty("line.separator");
-        res = res + "Serviço Categoria: " + System.getProperty("line.separator");
+        res = res + "Servico Categoria: " + System.getProperty("line.separator");
         res = res + this.getServicoCategoria().toPrint() + System.getProperty("line.separator");
         res = res + "Fornecedor: " +  System.getProperty("line.separator");
         res = res + this.getFornecedor().toPrint() + System.getProperty("line.separator");
         res = res + "Nome: " + this.getNome() + System.getProperty("line.separator");
-        res = res + "Descrição: " + this.getDescricao();
+        res = res + "Descricao: " + this.getDescricao();
 
         return res;
     }
