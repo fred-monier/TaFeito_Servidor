@@ -14,24 +14,24 @@ import br.pe.recife.tafeito.service.AcessoService;
 import br.pe.recife.tafeito.service.ClienteService;
 import br.pe.recife.tafeito.service.FornecedorService;
 
-public class FachadaTaFeitoREST implements IFachadaTaFeito {
+public class FachadaTaFeitoLocal implements IFachadaTaFeito {
 	
-    private static FachadaTaFeitoREST instancia;
+    private static FachadaTaFeitoLocal instancia;
 
     private AcessoService acessoService;
     private FornecedorService fornecedorService;
     private ClienteService clienteService;
     
-    public static FachadaTaFeitoREST getInstancia(){
+    public static FachadaTaFeitoLocal getInstancia(){
 
         if(instancia == null) {
-            instancia = new FachadaTaFeitoREST();
+            instancia = new FachadaTaFeitoLocal();
         }
 
         return instancia;
     }
 
-    private FachadaTaFeitoREST() {
+    private FachadaTaFeitoLocal() {
 
         this.acessoService = AcessoService.getInstancia();
         this.fornecedorService = FornecedorService.getInstancia();

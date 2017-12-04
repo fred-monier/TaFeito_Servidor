@@ -2,19 +2,26 @@ package br.pe.recife.tafeito.service;
 
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import br.pe.recife.tafeito.dao.FornecedorDAO;
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
 import br.pe.recife.tafeito.negocio.Fornecedor;
 import br.pe.recife.tafeito.negocio.ServicoCategoria;
+@Path("/FornecedorService")
 
 public class FornecedorService {
 
     private static FornecedorService instancia;
 
-    private FornecedorDAO fornecedorDao;
+    private FornecedorDAO fornecedorDao = FornecedorDAO.getInstancia();
 
-    private UsuarioService usuarioService;
+    private UsuarioService usuarioService = UsuarioService.getInstancia();
 
     public static FornecedorService getInstancia() {
 
@@ -25,10 +32,10 @@ public class FornecedorService {
         return instancia;
     }
 
-    private FornecedorService() {
-        this.fornecedorDao = FornecedorDAO.getInstancia();
-        this.usuarioService = UsuarioService.getInstancia();
-    }
+//    private FornecedorService() {
+//        this.fornecedorDao = FornecedorDAO.getInstancia();
+//        this.usuarioService = UsuarioService.getInstancia();
+//    }
 
     public void salvar(Fornecedor fornecedor) throws InfraException, NegocioException {
 
@@ -51,7 +58,9 @@ public class FornecedorService {
         }
     }
 
-    public Fornecedor consultar(long id) throws InfraException, NegocioException {
+    @GET
+    @Path("/fornecedores/{id}")
+    public Fornecedor consultar(@PathParam("id") long id) throws InfraException, NegocioException {
 
         Fornecedor res = null;
 
@@ -94,6 +103,9 @@ public class FornecedorService {
 
     }
 
+    @GET 
+    @Path("/fornecedores") 
+    @Produces(MediaType.APPLICATION_XML)      
     public List<Fornecedor> listar() throws InfraException{
 
         try {

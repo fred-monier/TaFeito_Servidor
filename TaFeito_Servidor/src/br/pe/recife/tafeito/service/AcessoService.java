@@ -1,6 +1,16 @@
 package br.pe.recife.tafeito.service;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 
 import br.pe.recife.tafeito.dao.AcessoDAO;
 import br.pe.recife.tafeito.excecao.InfraException;
@@ -10,14 +20,18 @@ import br.pe.recife.tafeito.negocio.Autenticacao;
 import br.pe.recife.tafeito.negocio.Cliente;
 import br.pe.recife.tafeito.negocio.Fornecedor;
 import br.pe.recife.tafeito.negocio.Usuario;
+@Path("/AcessoService")
 
 public class AcessoService {
 
+	private static final String SUCCESS_RESULT="<result>success</result>";
+	private static final String FAILURE_RESULT="<result>failure</result>";
+	
     private static AcessoService instancia;
-    private AcessoDAO acessoDao;
+    private AcessoDAO acessoDao = AcessoDAO.getInstancia();
 
-    private FornecedorService fornecedorService;
-    private ClienteService clienteService;
+    private FornecedorService fornecedorService = FornecedorService.getInstancia();
+    private ClienteService clienteService = ClienteService.getInstancia();
 
     public static AcessoService getInstancia() {
 
@@ -28,11 +42,11 @@ public class AcessoService {
         return instancia;
     }
 
-    private AcessoService() {
-        this.acessoDao = AcessoDAO.getInstancia();
-        this.fornecedorService = FornecedorService.getInstancia();
-        this.clienteService = ClienteService.getInstancia();
-    }
+//    private AcessoService() {
+//        this.acessoDao = AcessoDAO.getInstancia();
+//        this.fornecedorService = FornecedorService.getInstancia();
+//        this.clienteService = ClienteService.getInstancia();
+//    }
 
     public Autenticacao inserir(Acesso acesso, Usuario usuario) throws InfraException, NegocioException {
 
@@ -63,7 +77,99 @@ public class AcessoService {
 
         return res;
     }
-
+    
+    @POST
+    @Path("/acessosFornecedor")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)    
+    public String inserirAcessoFornecedor(@FormParam("login") String login, 
+    		@FormParam("senha") String senha, @FormParam("email") String email, 
+    		@FormParam("endereco") String endereco, @FormParam("habilitado") String habilitado, 
+    		@FormParam("nome") String nome, @FormParam("telefone") int telefone, 
+    		@FormParam("cnpj") String cnpj, @Context HttpServletResponse servletResponse) throws IOException  {
+    	
+    	String res = FAILURE_RESULT;
+    	
+    	//Acesso
+    	Acesso acesso = new Acesso();
+    	acesso.setLogin(login);
+    	acesso.setSenha(senha);
+    	
+    	//Fornecedor
+    	Fornecedor fornecedor = new Fornecedor();
+    	fornecedor.setEmail(email);
+    	fornecedor.setEndereco(endereco);
+    	boolean h = false;
+    	if (habilitado != null && habilitado.equals("true")) {
+    		h = true;
+    	}
+    	fornecedor.setHabilitado(h);
+    	fornecedor.setNome(nome);
+    	fornecedor.setTelefone(telefone);
+    	fornecedor.setCnpj(cnpj);
+    	
+    	try {
+    		fornecedorService.salvar(fornecedor);
+    			
+    		acesso.setId(fornecedor.getId());
+            acessoDao.inserir(acesso);
+            
+            res = SUCCESS_RESULT;
+    			
+	    } catch (Exception e) {
+	    	
+	        //throw new InfraException(e.getMessage(), e);
+	    }
+    	    	   
+    	return res;    	
+    }
+    
+    @POST
+    @Path("/acessosCliente")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)    
+    public String inserirAcessoCliente(@FormParam("login") String login, 
+    		@FormParam("senha") String senha, @FormParam("email") String email, 
+    		@FormParam("endereco") String endereco, @FormParam("habilitado") String habilitado, 
+    		@FormParam("nome") String nome, @FormParam("telefone") int telefone, 
+    		@FormParam("cpf") String cpf, @Context HttpServletResponse servletResponse) throws IOException {
+    	
+    	String res = FAILURE_RESULT;
+    	
+    	//Acesso
+    	Acesso acesso = new Acesso();
+    	acesso.setLogin(login);
+    	acesso.setSenha(senha);
+    	
+    	//Cliente
+    	Cliente cliente = new Cliente();
+    	cliente.setEmail(email);
+    	cliente.setEndereco(endereco);
+    	boolean h = false;
+    	if (habilitado != null && habilitado.equals("true")) {
+    		h = true;
+    	}
+    	cliente.setHabilitado(h);
+    	cliente.setNome(nome);
+    	cliente.setTelefone(telefone);
+    	cliente.setCpf(cpf);
+    	
+    	try {
+    		clienteService.salvar(cliente);
+    			
+    		acesso.setId(cliente.getId());
+            acessoDao.inserir(acesso);
+            
+            res = SUCCESS_RESULT;
+    			
+	    } catch (Exception e) {
+	    	
+	        //throw new InfraException(e.getMessage(), e);
+	    }
+    	    	   
+    	return res;    	
+    }    
+    
     public Autenticacao atualizar(Acesso acesso, Usuario usuario) throws InfraException, NegocioException {
 
         Autenticacao res = null;

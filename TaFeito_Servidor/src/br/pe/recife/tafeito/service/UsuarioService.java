@@ -1,16 +1,11 @@
 package br.pe.recife.tafeito.service;
 
 import java.util.List;
-import javax.ws.rs.GET; 
-import javax.ws.rs.Path; 
-import javax.ws.rs.Produces; 
-import javax.ws.rs.core.MediaType; 
 
 import br.pe.recife.tafeito.dao.UsuarioDAO;
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
 import br.pe.recife.tafeito.negocio.Usuario;
-@Path("/UsuarioService")
  
 public class UsuarioService {
 
@@ -79,11 +74,7 @@ public class UsuarioService {
         }
 
     }
-
-    
-    @GET 
-    @Path("/usuarios") 
-    @Produces(MediaType.APPLICATION_XML)      
+       
     public List<Usuario> listar() throws InfraException{
 
         try {

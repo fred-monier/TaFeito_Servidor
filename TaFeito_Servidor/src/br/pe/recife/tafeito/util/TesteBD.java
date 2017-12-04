@@ -3,7 +3,7 @@ package br.pe.recife.tafeito.util;
 import java.util.Iterator;
 import java.util.List;
 
-import br.pe.recife.tafeito.fachada.FachadaTaFeitoREST;
+import br.pe.recife.tafeito.fachada.FachadaTaFeitoLocal;
 import br.pe.recife.tafeito.fachada.IFachadaTaFeito;
 import br.pe.recife.tafeito.negocio.Acesso;
 import br.pe.recife.tafeito.negocio.Autenticacao;
@@ -14,7 +14,7 @@ public class TesteBD {
 
 	public static void main(String[] args) {
 		
-		IFachadaTaFeito fachada = FachadaTaFeitoREST.getInstancia();
+		IFachadaTaFeito fachada = FachadaTaFeitoLocal.getInstancia();
 		
 		
 		//int i;

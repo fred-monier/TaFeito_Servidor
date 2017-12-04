@@ -1,5 +1,9 @@
 package br.pe.recife.tafeito.negocio;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement(name = "fornecedor") 
+
 public class Fornecedor extends Usuario {
 
     private String cnpj;
@@ -8,6 +12,7 @@ public class Fornecedor extends Usuario {
         return cnpj;
     }
 
+    @XmlElement
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }

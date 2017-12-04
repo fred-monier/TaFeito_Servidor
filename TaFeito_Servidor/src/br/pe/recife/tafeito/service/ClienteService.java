@@ -2,18 +2,25 @@ package br.pe.recife.tafeito.service;
 
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
 import br.pe.recife.tafeito.dao.ClienteDAO;
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
 import br.pe.recife.tafeito.negocio.Cliente;
+@Path("/ClienteService")
 
 public class ClienteService {
 
     private static ClienteService instancia;
 
-    private ClienteDAO clienteDao;
+    private ClienteDAO clienteDao = ClienteDAO.getInstancia();
 
-    private UsuarioService usuarioService;    
+    private UsuarioService usuarioService = UsuarioService.getInstancia();
 
     public static ClienteService getInstancia() {
 
@@ -24,10 +31,10 @@ public class ClienteService {
         return instancia;
     }
 
-    private ClienteService() {
-        this.clienteDao = ClienteDAO.getInstancia();
-        this.usuarioService = UsuarioService.getInstancia();        
-    }
+//    private ClienteService() {
+//        this.clienteDao = ClienteDAO.getInstancia();
+//        this.usuarioService = UsuarioService.getInstancia();        
+//    }
 
     public void salvar(Cliente cliente) throws InfraException, NegocioException {
 
@@ -50,7 +57,9 @@ public class ClienteService {
         }
     }
 
-    public Cliente consultar(long id) throws InfraException, NegocioException {
+    @GET
+    @Path("/clientes/{id}")
+    public Cliente consultar(@PathParam("id") long id) throws InfraException, NegocioException {
 
         Cliente res = null;
 
@@ -94,6 +103,9 @@ public class ClienteService {
 
     }
 
+    @GET 
+    @Path("/clientes") 
+    @Produces(MediaType.APPLICATION_XML)      
     public List<Cliente> listar() throws InfraException{
 
         try {
