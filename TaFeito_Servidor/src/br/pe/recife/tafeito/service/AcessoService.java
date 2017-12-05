@@ -6,8 +6,10 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -24,8 +26,10 @@ import br.pe.recife.tafeito.negocio.Usuario;
 
 public class AcessoService {
 
-	private static final String SUCCESS_RESULT="<result>success</result>";
-	private static final String FAILURE_RESULT="<result>failure</result>";
+	private static final String SUCCESS_RESULT = "<result>success</result>";
+	private static final String FAILURE_RESULT = "<result>failure</result>";	
+	private static final String RESULT_BEGIN = "<result>";
+	private static final String RESULT_END = "</result>";
 	
     private static AcessoService instancia;
     private AcessoDAO acessoDao = AcessoDAO.getInstancia();
@@ -114,7 +118,7 @@ public class AcessoService {
     		acesso.setId(fornecedor.getId());
             acessoDao.inserir(acesso);
             
-            res = SUCCESS_RESULT;
+            res = RESULT_BEGIN + fornecedor.getId() + RESULT_END;
     			
 	    } catch (Exception e) {
 	    	
@@ -160,7 +164,7 @@ public class AcessoService {
     		acesso.setId(cliente.getId());
             acessoDao.inserir(acesso);
             
-            res = SUCCESS_RESULT;
+            res = RESULT_BEGIN + cliente.getId() + RESULT_END;
     			
 	    } catch (Exception e) {
 	    	
@@ -224,6 +228,36 @@ public class AcessoService {
         return res;
 
     }
+    
+    @GET
+    @Path("/acessosLoginSenhaFornecedor/{login}/{senha}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Autenticacao buscarPorLoginPorSenhaForn(@PathParam("login") String login, 
+    		@PathParam("senha") String senha) throws InfraException, NegocioException {
+
+    	Autenticacao res = null;
+
+        try {
+
+            long id = acessoDao.buscarPorLoginPorSenhaFornecedor(login, senha);
+
+            if (id <= 0) {
+                throw new NegocioException("excecao_objeto_nao_encontrado");
+            }
+
+            res = new Autenticacao();
+            res.setIdAcesso(id);
+            res.setToken("");
+
+        } catch (NegocioException e) {
+            throw  e;
+        } catch (Exception e) {
+            throw new InfraException(e.getMessage(), e);
+        }
+
+        return res;
+
+    }    
 
     public Autenticacao buscarPorLoginPorSenhaCliente(String login, String senha) throws InfraException, NegocioException {
 
@@ -250,6 +284,36 @@ public class AcessoService {
         return res;
 
     }
+    
+    @GET
+    @Path("/acessosLoginSenhaCliente/{login}/{senha}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Autenticacao buscarPorLoginPorSenhaClient(@PathParam("login") String login, 
+    		@PathParam("senha") String senha) throws InfraException, NegocioException {
+
+        Autenticacao res = null;
+
+        try {
+
+            long id = acessoDao.buscarPorLoginPorSenhaCliente(login, senha);
+
+            if (id <= 0) {
+                throw new NegocioException("excecao_objeto_nao_encontrado");
+            }
+
+            res = new Autenticacao();
+            res.setIdAcesso(id);
+            res.setToken("");
+
+        } catch (NegocioException e) {
+            throw  e;
+        } catch (Exception e) {
+            throw new InfraException(e.getMessage(), e);
+        }
+
+        return res;
+
+    }    
 
     public boolean existePorLogin(String login) throws InfraException {
 
@@ -264,6 +328,28 @@ public class AcessoService {
         }
 
         return res;
+    }
+    
+    @POST
+    @Path("/liberadoLogin")
+    @Produces(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)    
+    public String liberadoLogin(@FormParam("login") String login, 
+    		@Context HttpServletResponse servletResponse) throws IOException {    
+    	
+    	String res = FAILURE_RESULT;    	   
+    	
+    	try {
+
+            if (!acessoDao.existePorLogin(login)) {
+            	res = SUCCESS_RESULT;
+            }
+
+        } catch (Exception e) {
+            //throw new InfraException(e.getMessage(), e);
+        }
+    	    	
+    	return res;    	
     }
     
     public Acesso consultar(long id) throws InfraException, NegocioException {

@@ -1,30 +1,50 @@
 package br.pe.recife.tafeito.fachada;
 
+import java.io.IOException;
 import java.util.List;
+
+import javax.ws.rs.Path;
 
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
-import br.pe.recife.tafeito.negocio.Acesso;
 import br.pe.recife.tafeito.negocio.Autenticacao;
 import br.pe.recife.tafeito.negocio.Cliente;
 import br.pe.recife.tafeito.negocio.Fornecedor;
 import br.pe.recife.tafeito.negocio.ServicoCategoria;
-import br.pe.recife.tafeito.negocio.Usuario;
 
 public interface IFachadaTaFeitoREST {
 	
 	//AcessoService	
-	//***
+	//*** I
     //Autenticacao inserirAcesso(Acesso acesso, Usuario usuario) throws InfraException, NegocioException;    
-    Autenticacao inserirAcessoFornecedor(String login, String senha, 
-    		String email, String endereco, String habilitado, String nome, int telefone, String cnpj) throws InfraException, NegocioException;//OK - /acessosFornecedor
-    Autenticacao inserirAcessoCliente(String login, String senha, 
-    		String email, String endereco, String habilitado, String nome, int telefone, String cpf) throws InfraException, NegocioException;//OK - /acessosCliente
-    //***         
+    String inserirAcessoFornecedor(String login, String senha, 
+    		String email, String endereco, String habilitado, String nome, int telefone, String cnpj) throws IOException;//OK - /acessosFornecedor
+    	//POST @Path("/acessosFornecedor")
+    String inserirAcessoCliente(String login, String senha, 
+    		String email, String endereco, String habilitado, String nome, int telefone, String cpf) throws IOException;//OK - /acessosCliente
+    	//POST @Path("/acessosCliente")
+    //*** F       
+    
     //Autenticacao atualizarAcesso(Acesso acesso, Usuario usuario) throws InfraException, NegocioException;
-    Autenticacao buscarPorLoginPorSenhaFornecedorAcesso(String login, String senha) throws InfraException, NegocioException;
-    Autenticacao buscarPorLoginPorSenhaClienteAcesso(String login, String senha) throws InfraException, NegocioException;
-    boolean existePorLoginAcesso(String login) throws InfraException;
+    
+    //*** I
+    //Autenticacao buscarPorLoginPorSenhaFornecedorAcesso(String login, String senha) throws InfraException, NegocioException;
+    Autenticacao buscarPorLoginPorSenhaForn(String login, String senha) throws InfraException, NegocioException;
+    	//GET @Path("/acessosLoginSenhaFornecedor/{login}/{senha}")
+    //*** F
+    
+    // *** I
+    //Autenticacao buscarPorLoginPorSenhaClienteAcesso(String login, String senha) throws InfraException, NegocioException;
+    Autenticacao buscarPorLoginPorSenhaClient(String login, String senha) throws InfraException, NegocioException;
+    	//GET @Path("/acessosLoginSenhaCliente/{login}/{senha}")
+    //*** F
+    
+    //*** I
+    //boolean existePorLoginAcesso(String login) throws InfraException;
+    String liberadoLogin(String login) throws IOException;
+    	//POST @Path("/liberadoLogin")
+    //*** F
+    
     //Acesso consultarAcesso(long id, Autenticacao autenticacao) throws InfraException, NegocioException;
     //void excluirAcessoCliente(Acesso acesso, Autenticacao autenticacao) throws InfraException;
     //void excluirAcessoFornecedor(Acesso acesso, Autenticacao autenticacao) throws InfraException;

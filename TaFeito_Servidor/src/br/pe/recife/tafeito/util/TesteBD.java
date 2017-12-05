@@ -14,6 +14,35 @@ public class TesteBD {
 
 	public static void main(String[] args) {
 		
+		
+		TesteBD teste = new TesteBD();
+		
+		//teste.teste1();
+		
+		teste.teste2();
+		
+			
+	}
+	
+	private void teste2() {
+		
+		IFachadaTaFeito fachada = FachadaTaFeitoLocal.getInstancia();
+		
+		
+		try {
+			Autenticacao aut = fachada.buscarPorLoginPorSenhaFornecedorAcesso("fornecedor1@gmail.com", "1234");
+			
+			System.out.println("Id: " + aut.getIdAcesso());
+			
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+		
+		
+	}
+	
+	private void teste1() {
+		
 		IFachadaTaFeito fachada = FachadaTaFeitoLocal.getInstancia();
 		
 		
@@ -243,11 +272,8 @@ public class TesteBD {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-        }        
+        }        		
 		
-		
-		
-
 	}
 
 }
