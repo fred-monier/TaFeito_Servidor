@@ -6,10 +6,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -228,12 +226,14 @@ public class AcessoService {
         return res;
 
     }
-    
-    @GET
-    @Path("/acessosLoginSenhaFornecedor/{login}/{senha}")
+       
+    @POST
+    @Path("/acessosLoginSenhaFornecedor")
     @Produces(MediaType.APPLICATION_JSON)
-    public Autenticacao buscarPorLoginPorSenhaForn(@PathParam("login") String login, 
-    		@PathParam("senha") String senha) throws InfraException, NegocioException {
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Autenticacao buscarPorLoginPorSenhaForn(@FormParam("login") String login, 
+    		@FormParam("senha") String senha, @Context HttpServletResponse servletResponse) 
+    				throws IOException, InfraException, NegocioException {
 
     	Autenticacao res = null;
 
@@ -284,12 +284,14 @@ public class AcessoService {
         return res;
 
     }
-    
-    @GET
-    @Path("/acessosLoginSenhaCliente/{login}/{senha}")
+          
+    @POST
+    @Path("/acessosLoginSenhaCliente")
     @Produces(MediaType.APPLICATION_JSON)
-    public Autenticacao buscarPorLoginPorSenhaClient(@PathParam("login") String login, 
-    		@PathParam("senha") String senha) throws InfraException, NegocioException {
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Autenticacao buscarPorLoginPorSenhaClient(@FormParam("login") String login, 
+    		@FormParam("senha") String senha, @Context HttpServletResponse servletResponse) 
+    				throws IOException, InfraException, NegocioException {
 
         Autenticacao res = null;
 

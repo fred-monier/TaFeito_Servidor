@@ -20,10 +20,18 @@ public class DBTaFeito {
 			
 	private static final String DRIVER = "org.postgresql.Driver";
 	
+	//Local
 	private static final String FONTE_DADOS = "tafeito";
 	private static final String URL = "jdbc:postgresql://127.0.0.1:5432/tafeito";
 	private static final String LOGIN = "postgres";
 	private static final String SENHA = "admin";
+	
+	//Remoto
+//	private static final String FONTE_DADOS = "tafeito";
+//	private static final String URL = "jdbc:postgresql://127.0.0.1:5432/tafeito";
+//	private static final String LOGIN = "unibratecUser";
+//	private static final String SENHA = "unibratecUser2017";
+	
 	private static final int CONEXOES = 10;		   
 
     public static final String TABELA_ACESSO = "\"ACESSO\"";

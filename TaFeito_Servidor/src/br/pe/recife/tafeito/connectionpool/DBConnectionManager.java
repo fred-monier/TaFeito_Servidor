@@ -35,7 +35,7 @@ public class DBConnectionManager {
 	
 	private Hashtable pools = new Hashtable();
 	
-	private boolean modo_debug = false;
+	private boolean modo_debug = true;
 	
 	private PrintWriter log;
 	
