@@ -3,8 +3,6 @@ package br.pe.recife.tafeito.fachada;
 import java.io.IOException;
 import java.util.List;
 
-import javax.ws.rs.Path;
-
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
 import br.pe.recife.tafeito.negocio.Autenticacao;

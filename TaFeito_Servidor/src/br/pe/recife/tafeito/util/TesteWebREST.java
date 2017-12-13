@@ -1,8 +1,5 @@
 package br.pe.recife.tafeito.util;
 
-import java.util.List;
-
-import javax.ws.rs.FormParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;

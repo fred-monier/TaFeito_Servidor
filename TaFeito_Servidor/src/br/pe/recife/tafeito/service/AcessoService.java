@@ -85,10 +85,10 @@ public class AcessoService {
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)    
     public String inserirAcessoFornecedor(@FormParam("login") String login, 
-    		@FormParam("senha") String senha, @FormParam("email") String email, 
-    		@FormParam("endereco") String endereco, @FormParam("habilitado") String habilitado, 
-    		@FormParam("nome") String nome, @FormParam("telefone") int telefone, 
-    		@FormParam("cnpj") String cnpj, @Context HttpServletResponse servletResponse) throws IOException  {
+    		@FormParam("senha") String senha, @FormParam("endereco") String endereco, 
+    		@FormParam("habilitado") String habilitado, @FormParam("nome") String nome, 
+    		@FormParam("telefone") int telefone, @FormParam("cnpj") String cnpj, 
+    		@Context HttpServletResponse servletResponse) throws IOException  {
     	
     	String res = FAILURE_RESULT;
     	
@@ -99,7 +99,7 @@ public class AcessoService {
     	
     	//Fornecedor
     	Fornecedor fornecedor = new Fornecedor();
-    	fornecedor.setEmail(email);
+    	fornecedor.setEmail(login);
     	fornecedor.setEndereco(endereco);
     	boolean h = false;
     	if (habilitado != null && habilitado.equals("true")) {
@@ -131,10 +131,10 @@ public class AcessoService {
     @Produces(MediaType.APPLICATION_XML)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)    
     public String inserirAcessoCliente(@FormParam("login") String login, 
-    		@FormParam("senha") String senha, @FormParam("email") String email, 
-    		@FormParam("endereco") String endereco, @FormParam("habilitado") String habilitado, 
-    		@FormParam("nome") String nome, @FormParam("telefone") int telefone, 
-    		@FormParam("cpf") String cpf, @Context HttpServletResponse servletResponse) throws IOException {
+    		@FormParam("senha") String senha, @FormParam("endereco") String endereco, 
+    		@FormParam("habilitado") String habilitado,	@FormParam("nome") String nome, 
+    		@FormParam("telefone") int telefone, @FormParam("cpf") String cpf, 
+    		@Context HttpServletResponse servletResponse) throws IOException {
     	
     	String res = FAILURE_RESULT;
     	
@@ -145,7 +145,7 @@ public class AcessoService {
     	
     	//Cliente
     	Cliente cliente = new Cliente();
-    	cliente.setEmail(email);
+    	cliente.setEmail(login);
     	cliente.setEndereco(endereco);
     	boolean h = false;
     	if (habilitado != null && habilitado.equals("true")) {
