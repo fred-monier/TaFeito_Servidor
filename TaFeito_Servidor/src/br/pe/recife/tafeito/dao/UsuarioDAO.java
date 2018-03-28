@@ -29,7 +29,16 @@ public class UsuarioDAO implements IDAO<Usuario> {
 
     private UsuarioDAO() {        
     }
-    
+        
+	@Override
+	public void salvar(Usuario usuario) throws InfraException {
+	    if (usuario.getId() == 0) {
+	        this.inserir(usuario);
+	    } else {
+	        this.atualizar(usuario);
+	    }		
+	}    
+	
     private long inserir(Usuario usuario) throws InfraException {    	
     	
     	PreparedStatement pst = null;
@@ -132,16 +141,7 @@ public class UsuarioDAO implements IDAO<Usuario> {
 		}        	
     	    
     }           
-        
-	@Override
-	public void salvar(Usuario usuario) throws InfraException {
-        if (usuario.getId() == 0) {
-            this.inserir(usuario);
-        } else {
-            this.atualizar(usuario);
-        }		
-	}	
-
+	
 	@Override
 	public void excluir(Usuario entidade) throws InfraException {
 		

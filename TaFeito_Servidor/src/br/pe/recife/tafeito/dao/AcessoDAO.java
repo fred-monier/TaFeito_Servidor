@@ -14,7 +14,7 @@ import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.negocio.Acesso;
 import br.pe.recife.tafeito.util.DBTaFeito;
 
-public class AcessoDAO {
+public class AcessoDAO implements IDAOson<Acesso> {
 
     private static AcessoDAO instancia;    
     
@@ -30,7 +30,17 @@ public class AcessoDAO {
     private AcessoDAO() {       
     }
     
-    public long inserir(Acesso acesso) throws InfraException {    	
+
+	@Override
+	public void salvar(Acesso entidade, boolean novo) throws InfraException {
+	    if (novo) {
+	        this.inserir(entidade);
+	    } else {
+	        this.atualizar(entidade);
+	    }		
+	}    
+    
+    private long inserir(Acesso acesso) throws InfraException {    	
     	
     	PreparedStatement pst = null;
     	ResultSet rs = null;
@@ -71,7 +81,7 @@ public class AcessoDAO {
     	return id;    	
     }
     
-    public void atualizar(Acesso acesso) throws InfraException {    
+    private void atualizar(Acesso acesso) throws InfraException {    
     	
     	PreparedStatement pst = null;
     	
@@ -422,7 +432,6 @@ public class AcessoDAO {
 			}						
 		}							
 	}
-
 	
 	
 }

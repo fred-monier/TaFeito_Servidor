@@ -2,25 +2,20 @@ package br.pe.recife.tafeito.service;
 
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import br.pe.recife.tafeito.dao.ClienteDAO;
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
+import br.pe.recife.tafeito.negocio.Acesso;
 import br.pe.recife.tafeito.negocio.Cliente;
-@Path("/ClienteService")
 
 public class ClienteService {
 
     private static ClienteService instancia;
 
-    private ClienteDAO clienteDao = ClienteDAO.getInstancia();
+    private ClienteDAO clienteDao;
 
-    private UsuarioService usuarioService = UsuarioService.getInstancia();
+    private UsuarioService usuarioService;
+    private AcessoService acessoService;
 
     public static ClienteService getInstancia() {
 
@@ -31,35 +26,38 @@ public class ClienteService {
         return instancia;
     }
 
-//    private ClienteService() {
-//        this.clienteDao = ClienteDAO.getInstancia();
-//        this.usuarioService = UsuarioService.getInstancia();        
-//    }
+    private ClienteService() {
+        this.clienteDao = ClienteDAO.getInstancia();
+        
+        this.usuarioService = UsuarioService.getInstancia();
+        this.acessoService = AcessoService.getInstancia();       
+    }
 
-    public void salvar(Cliente cliente) throws InfraException, NegocioException {
+    //REVISADO OK
+    public void salvar(Cliente cliente, Acesso acesso) throws InfraException, NegocioException {
 
-        if(cliente == null) {
+        if (cliente == null) {
             throw new NegocioException("excecao_objeto_nulo");
         }
 
         try {
 
-            boolean clienteNovo = false;
+            boolean novo = false;
             if (cliente.getId() == 0) {
-                clienteNovo = true;
+                novo = true;
             }
 
             usuarioService.salvar(cliente);
-            clienteDao.salvar(cliente, clienteNovo);
+            clienteDao.salvar(cliente, novo);
+            acesso.setId(cliente.getId());
+            acessoService.salvar(acesso, novo);
 
         } catch (Exception e) {
             throw new InfraException(e.getMessage(), e);
         }
     }
 
-    @GET
-    @Path("/clientes/{id}")
-    public Cliente consultar(@PathParam("id") long id) throws InfraException, NegocioException {
+    public Cliente consultar(long id) throws InfraException, NegocioException {
 
         Cliente res = null;
 
@@ -84,17 +82,9 @@ public class ClienteService {
 
         try {
 
-            //res = clienteDao.excluir(cliente);
-            //if (res <= 0) {
-            //    throw new NegocioException("excecao_objeto_nao_excluido");
-            //}
         	clienteDao.excluir(cliente);
-
-            //res = usuarioService.excluir(cliente);
-            //if (res <= 0) {
-            //    throw new NegocioException("excecao_objeto_nao_excluido");
-            //}
-        	usuarioService.excluir(cliente);        	
+        	usuarioService.excluir(cliente); 
+        	acessoService.excluir(acessoService.consultar(cliente.getId()));
         	
 
         } catch (Exception e) {
@@ -102,10 +92,7 @@ public class ClienteService {
         }
 
     }
-
-    @GET 
-    @Path("/clientes") 
-    @Produces(MediaType.APPLICATION_XML)      
+    
     public List<Cliente> listar() throws InfraException{
 
         try {

@@ -10,7 +10,7 @@ import br.pe.recife.tafeito.negocio.Usuario;
 public class UsuarioService {
 
     private static UsuarioService instancia;
-    private UsuarioDAO usuarioDao = UsuarioDAO.getInstancia();
+    private UsuarioDAO usuarioDao;
 
     public static UsuarioService getInstancia() {
 
@@ -21,9 +21,9 @@ public class UsuarioService {
         return instancia;
     }
     
-//    public UsuarioService() {
-//        this.usuarioDao = UsuarioDAO.getInstancia();
-//    }
+    public UsuarioService() {
+        this.usuarioDao = UsuarioDAO.getInstancia();
+    }
 
     public void salvar(Usuario usuario) throws InfraException, NegocioException {
 
@@ -64,10 +64,6 @@ public class UsuarioService {
         try {
 
             usuarioDao.excluir(usuario);
-
-            //if (res <= 0) {
-            //    throw new NegocioException("excecao_objeto_nao_excluido");
-            //}
             
         } catch (Exception e) {
             throw new InfraException(e.getMessage(), e);

@@ -2,26 +2,21 @@ package br.pe.recife.tafeito.service;
 
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
 import br.pe.recife.tafeito.dao.FornecedorDAO;
 import br.pe.recife.tafeito.excecao.InfraException;
 import br.pe.recife.tafeito.excecao.NegocioException;
+import br.pe.recife.tafeito.negocio.Acesso;
 import br.pe.recife.tafeito.negocio.Fornecedor;
 import br.pe.recife.tafeito.negocio.ServicoCategoria;
-@Path("/FornecedorService")
 
 public class FornecedorService {
 
     private static FornecedorService instancia;
 
-    private FornecedorDAO fornecedorDao = FornecedorDAO.getInstancia();
+    private FornecedorDAO fornecedorDao;
 
-    private UsuarioService usuarioService = UsuarioService.getInstancia();
+    private UsuarioService usuarioService;    
+    private AcessoService acessoService;
 
     public static FornecedorService getInstancia() {
 
@@ -32,14 +27,17 @@ public class FornecedorService {
         return instancia;
     }
 
-//    private FornecedorService() {
-//        this.fornecedorDao = FornecedorDAO.getInstancia();
-//        this.usuarioService = UsuarioService.getInstancia();
-//    }
+    private FornecedorService() {
+        this.fornecedorDao = FornecedorDAO.getInstancia();
+        
+        this.usuarioService = UsuarioService.getInstancia();
+        this.acessoService = AcessoService.getInstancia();
+    }
 
-    public void salvar(Fornecedor fornecedor) throws InfraException, NegocioException {
+    //REVISADO OK
+    public void salvar(Fornecedor fornecedor, Acesso acesso) throws InfraException, NegocioException {
 
-        if(fornecedor == null) {
+        if (fornecedor == null) {
             throw new NegocioException("excecao_objeto_nulo");
         }
 
@@ -52,15 +50,15 @@ public class FornecedorService {
 
             usuarioService.salvar(fornecedor);
             fornecedorDao.salvar(fornecedor, novo);
+            acesso.setId(fornecedor.getId());
+            acessoService.salvar(acesso, novo);
 
         } catch (Exception e) {
             throw new InfraException(e.getMessage(), e);
         }
     }
 
-    @GET
-    @Path("/fornecedores/{id}")
-    public Fornecedor consultar(@PathParam("id") long id) throws InfraException, NegocioException {
+    public Fornecedor consultar(long id) throws InfraException, NegocioException {
 
         Fornecedor res = null;
 
@@ -85,27 +83,16 @@ public class FornecedorService {
 
         try {
 
-            //res = fornecedorDao.excluir(fornecedor);
-            //if (res <= 0) {
-            //    throw new NegocioException("excecao_objeto_nao_excluido");
-            //}
-            fornecedorDao.excluir(fornecedor);
-                        
-            //res = usuarioService.excluir(fornecedor);
-            //if (res <= 0) {
-            //    throw new NegocioException("excecao_objeto_nao_excluido");
-            //}
+            fornecedorDao.excluir(fornecedor);                        
             usuarioService.excluir(fornecedor);
-
+            acessoService.excluir(acessoService.consultar(fornecedor.getId()));
+            
         } catch (Exception e) {
             throw new InfraException(e.getMessage(), e);
         }
 
     }
-
-    @GET 
-    @Path("/fornecedores") 
-    @Produces(MediaType.APPLICATION_XML)      
+ 
     public List<Fornecedor> listar() throws InfraException{
 
         try {

@@ -39,30 +39,38 @@ public class FachadaTaFeitoLocal implements IFachadaTaFeito {
         
     }    
 
+    //Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public Autenticacao inserirAcesso(Acesso acesso, Usuario usuario) throws InfraException, NegocioException {
 		
-		return this.acessoService.inserir(acesso, usuario);
+		//return this.acessoService.inserir(acesso, usuario);
+		return null;
 	}
 
+	//Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public Autenticacao atualizarAcesso(Acesso acesso, Usuario usuario) throws InfraException, NegocioException {
 		
-		return this.acessoService.inserir(acesso, usuario);
+		//return this.acessoService.inserir(acesso, usuario);
+		return null;
 	}
 
+	//Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public Autenticacao buscarPorLoginPorSenhaFornecedorAcesso(String login, String senha)
 			throws InfraException, NegocioException {
 		
-		return this.acessoService.buscarPorLoginPorSenhaFornecedor(login, senha);
+		//return this.acessoService.buscarPorLoginPorSenhaFornecedor(login, senha);
+		return null;
 	}
 
+	//Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public Autenticacao buscarPorLoginPorSenhaClienteAcesso(String login, String senha)
 			throws InfraException, NegocioException {
 		
-		return this.acessoService.buscarPorLoginPorSenhaCliente(login, senha);
+		//return this.acessoService.buscarPorLoginPorSenhaCliente(login, senha);
+		return null;
 	}
 
 	@Override
@@ -77,16 +85,18 @@ public class FachadaTaFeitoLocal implements IFachadaTaFeito {
 		return this.acessoService.consultar(id);
 	}
 
+	//Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public void excluirAcessoCliente(Acesso acesso, Autenticacao autenticacao) throws InfraException {
 		
-		this.acessoService.excluirCliente(acesso);
+		//this.acessoService.excluirCliente(acesso);
 	}
 
+	//Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public void excluirAcessoFornecedor(Acesso acesso, Autenticacao autenticacao) throws InfraException {
 		
-		this.acessoService.excluirFornecedor(acesso);
+		//this.acessoService.excluirFornecedor(acesso);
 	}
 
 	@Override
@@ -95,11 +105,12 @@ public class FachadaTaFeitoLocal implements IFachadaTaFeito {
 		return this.acessoService.listar();
 	}
 
+	//Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public void salvarFornecedor(Fornecedor fornecedor, Autenticacao autenticacao)
 			throws InfraException, NegocioException {
 		
-		this.fornecedorService.salvar(fornecedor);
+		//this.fornecedorService.salvar(fornecedor);
 		
 	}
 
@@ -129,10 +140,11 @@ public class FachadaTaFeitoLocal implements IFachadaTaFeito {
 		return this.fornecedorService.listarPorServicoCategoria(servicoCategoria);
 	}
 
+	//Comentei devido às regras de negócio (além do simples teste do BD local) para inclusão de Acesso, Usuário, Cliente e Fornecedor
 	@Override
 	public void salvarCliente(Cliente cliente, Autenticacao autenticacao) throws InfraException, NegocioException {
 		
-		this.clienteService.salvar(cliente);		
+		//this.clienteService.salvar(cliente);		
 	}
 
 	@Override

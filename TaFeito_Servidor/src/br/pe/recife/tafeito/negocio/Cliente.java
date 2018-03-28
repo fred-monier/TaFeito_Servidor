@@ -1,9 +1,5 @@
 package br.pe.recife.tafeito.negocio;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-@XmlRootElement(name = "cliente") 
-
 public class Cliente extends Usuario {
 
     private String cpf;
@@ -12,7 +8,6 @@ public class Cliente extends Usuario {
         return cpf;
     }
 
-    @XmlElement
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
